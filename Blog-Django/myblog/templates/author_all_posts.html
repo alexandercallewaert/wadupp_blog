@@ -9,7 +9,8 @@
 	{% else %}
 	{{get_user.username}}
 	{% endif %}
-	Posts</h1>
+</h1>
+<br/>
 
 <ul>
 {% for post in all_post_of_this_usr %}
@@ -17,7 +18,7 @@
 
 		- <a href = "{% url 'category' post.category.id %}">{{ post.category }}</a>
 
-		- <a href="{% url 'author_all_posts' post.author.id %}"> {% if post.author.first_name or post.author.last_name %}{{ post.author.first_name }} {{ post.author.last_name }}{% else %}{{ post.author.username }}{% endif %}</a> - {{ post.post_date }}
+		- {{ post.post_date }}
 
 	<small>
 		{% if user.is_authenticated %}

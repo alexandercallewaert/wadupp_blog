@@ -8,8 +8,7 @@
 	<h1>{{ post.title }}</h1>
 	<small>{{ post.category }} | 
 		By: 
-		{{ post.author.first_name }} 
-		{{ post.author.last_name }} - 
+		{% if post.author.first_name or post.author.last_name %} {{ post.author.first_name }} {{ post.author.last_name }} {% else %} {{ post.author.username }} {% endif %} - 
 		{{ post.post_date }}
 
 		{% if user.is_authenticated %}
@@ -168,7 +167,7 @@
 	
 		{% for comment in post.comments.all %}
 			<strong>
-				{{ comment.your_name }} - {{ comment.date_added }}
+				{{ comment.your_name }} - {{ comment.date_added }} (CET)
 			</strong>
 			<br/>
 			{{ comment.body }}
