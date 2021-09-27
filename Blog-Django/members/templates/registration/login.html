@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-7 col-lg-7">
+	<h1 style="margin:10px 0px">Login...</h1>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<img src="/media/images/profile/Wadupp_white_BG.png" width = 80 height = 80 style="margin:10px 0px" align="right">
+	</div>
+</div>
+
+<br/>
+<div class = "form-group">
+	<form method = "POST">
+		{% csrf_token %}
+
+		<div class="mb-3">
+    		<input type="text" class="form-control" name = "username" placeholder = "Username">
+  		</div>
+  		
+  		<div class="mb-3">
+    		<input type="password" class="form-control" name = "password" placeholder = "Password">
+  		</div>
+
+  		<br/>
+
+		<button class="btn btn-secondary">Login</button>
+	
+	</form>
+</div>
+
+<br/>
+
+<small class = "form-text text-muted">Not a User? Register <a href ="{% url 'register' %}">Here</a></small>
+
+
+
+{% endblock %}

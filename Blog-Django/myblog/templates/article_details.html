@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title_tag }}{% endblock %}
+
+{% block content %}
+
+	<h1>{{ post.title }}</h1>
+	<small>{{ post.category }} | 
+		By: 
+		{{ post.author.first_name }} 
+		{{ post.author.last_name }} - 
+		{{ post.post_date }}
+
+		{% if user.is_authenticated %}
+			{% if user.id == post.author.id %}
+				- <a href = "{% url 'update_post' post.pk %}">(edit)</a> 
+
+				<a href = "{% url 'delete_post' post.pk %}">(delete)</a>
+			{% endif %}
+		{% endif %}
+
+	</small> <br/>
+	<hr>
+	<br/>
+
+{% if post.header_image or image2 or image3 %}
+<div id="carouselExampleIndicators" class="carousel slide mb-5" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-color:red"></button>
+	  {% if post.image2 %}
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2" style="background-color:red"></button>
+	  {% endif %}
+
+	  {% if post.image3 %}
+    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3" style="background-color:red"></button>
+	  {% endif %}
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{{ post.header_image.url }}" class="d-block w-100" alt="{{ post.title }}" height = 480>
+    </div>
+	  {% if post.image2 %}
+    <div class="carousel-item">
+      <img src="{{ post.image2.url }}" class="d-block w-100" alt="{{ post.title }}" height = 480>
+    </div>
+	  {% endif %}
+	  {% if post.image3 %}
+    <div class="carousel-item">
+      <img src="{{ post.image3.url }}" class="d-block w-100" alt="{{ post.title }}" height = 480>
+    </div>
+	  {% endif %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color:red"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color:red"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>
+{% endif %}
+
+
+	{{ post.body | safe }}
+	<br/><br/>
+
+<div class="card border-white mb-3" style="max-width: 620px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+
+		{% if post.author.profile.profile_pic %}
+      		<img src="{{ post.author.profile.profile_pic.url }}" width = 150 height = 150 class = "rounded-circle">
+
+  		{% else %}
+  			<img src="{% static 'myblog/images/default.png' %}" width = 150 height = 150 class = "rounded-circle">
+
+  		{% endif %}
+
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">
+        	{{ post.author.first_name }}
+        </h5>
+        <p class="small text-muted">
+
+        	<a href = "{% url 'show_profile_page' post.author.profile.id %}">Profile</a>
+
+        	{% if post.author.profile.polarsteps_url %}
+        		| <a href = "{{ post.author.profile.polarsteps_url }}">Polarsteps</a> 
+    		{% endif %}
+
+        	{% if post.author.profile.instagram_url %}
+        		| <a href = "{{ post.author.profile.instagram_url }}">Instagram</a> 
+    		{% endif %}
+
+    		{% if post.author.profile.facebook_url %}
+        		| <a href = "{{ post.author.profile.facebook_url }}">Facebook</a> 
+    		{% endif %}
+
+    		{% if post.author.profile.linkedin_url %}
+        		| <a href = "{{ post.author.profile.linkedin_url }}">LinkedIn</a>
+        	{% endif %}
+
+        </p>
+        <p class="card-text">
+        	{{ post.author.profile.bio }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+	<br/><br/>
+	<a href = "{% url 'home' %}" class = "btn btn-secondary">Back</a>
+
+	<br/><br/>
+	<hr>
+	<br/>
+
+	<form action = "{% url 'like_post' post.pk %}" method = "POST">
+		{% csrf_token %}
+
+	{{ total_likes }} Likes
+
+	<br/><br/>
+
+	{% if user.is_authenticated %}
+
+		{% if liked %}
+			<button type = "submit", name = "post_id", value = "{{ post.id }}", class = "btn btn-danger btn-sm">Unlike</button> 
+		{% else %}
+			<button type = "submit", name = "post_id", value = "{{ post.id }}", class = "btn btn-primary btn-sm">Like</button>
+		{% endif %}
+
+	<br/><br/>
+
+	{% else %}
+		<div class="alert alert-danger" role="alert"><a class="nav-link" href="{% url 'login' %}">Login to like</a></div>
+
+	{% endif %}
+
+
+	</form>
+
+
+<hr>
+<h2>Comments</h2>
+<br/>
+
+{% if not post.comments.all %}
+	No comments yet...<br/><br/>
+
+	{% if user.is_authenticated %}
+		<a href = "{% url 'add_comment' post.pk %}"><button type="button" class="btn btn-outline-primary">Add Comment</button></a>
+
+	{% else %}
+		<div class="alert alert-danger" role="alert"><a class="nav-link" href="{% url 'login' %}">Login to comment</a></div>
+
+	{% endif %}
+
+
+{% else %}
+	
+	
+		{% for comment in post.comments.all %}
+			<strong>
+				{{ comment.your_name }} - {{ comment.date_added }}
+			</strong>
+			<br/>
+			{{ comment.body }}
+			<br/><br/>
+
+		{% endfor %}
+
+	{% if user.is_authenticated %}
+		<a href = "{% url 'add_comment' post.pk %}"><button type="button" class="btn btn-outline-primary">Add Comment</button></a>
+		<br/><br/>
+
+	{% else %}
+		<div class="alert alert-danger" role="alert"><a class="nav-link" href="{% url 'login' %}">Login to comment</a></div>
+
+	{% endif %}
+
+{% endif %}
+
+
+
+<hr>
+<br/>
+
+
+
+
+{% endblock %}

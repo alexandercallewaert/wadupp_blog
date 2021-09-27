@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+ 
+
+
+<h1>User Profile</h1>
+
+<br/>
+
+<div class="card border-white mb-3" style="max-width: 620px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+
+		{% if page_user.profile_pic %}
+      		<img src="{{ page_user.profile_pic.url }}" width = 150 height = 150 class = "rounded-circle">
+
+  		{% else %}
+  			<img src="{% static 'myblog/images/default.png' %}" width = 150 height = 150 class = "rounded-circle">
+
+  		{% endif %}
+
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">
+        	{{ page_user.user.first_name }}
+        </h5>
+        <p class="small text-muted">
+
+
+        	{% if page_user.polarsteps_url %}
+        		<a href = "{{ page_user.polarsteps_url }}">Polarsteps</a> 
+    		{% endif %}
+
+        	{% if page_user.instagram_url %}
+        		| <a href = "{{ page_user.instagram_url }}">Instagram</a> 
+    		{% endif %}
+
+    		{% if page_user.facebook_url %}
+        		| <a href = "{{ page_user.facebook_url }}">Facebook</a> 
+    		{% endif %}
+
+    		{% if page_user.linkedin_url %}
+        		| <a href = "{{ page_user.linkedin_url }}">LinkedIn</a>
+        	{% endif %}
+
+        </p>
+        <p class="card-text">
+        	{{ page_user.bio }}
+        </p>
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% if page_user_posts %}
+    <h1>Posts</h1>
+    <ul>
+
+    {% for post in page_user_posts %}
+      <li><a href="{% url 'article-detail' post.pk %}">{{ post.title }}</a>
+
+        - <a href = "{% url 'category' post.category.id %}">{{ post.category }}</a>
+
+        -  {{ post.post_date }}
+
+      <small>
+        {% if user.is_authenticated %}
+
+          {% if user.id == post.author.id %}
+            - <a href = "{% url 'update_post' post.pk %}">(edit)</a>
+
+            <a href = "{% url 'delete_post' post.pk %}">(delete)</a>
+          {% endif %}
+
+        {% endif %}
+
+      </small>
+          <br/>
+            {{ post.snippet }} ... <a href = {% url 'article-detail' post.pk %}>read more</a>
+      </li>
+    {% endfor %}
+    </ul>
+{% else %}
+<h6> No Posts Avaiable !</h6>
+{% endif %}
+
+
+{% endblock %}

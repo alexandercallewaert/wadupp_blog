@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-md-7 col-lg-7">
+	<h1 style="margin:10px 0px">Register...</h1>
+	</div>
+	<div class="col-md-4 col-lg-4">
+		<img src="/media/images/profile/Wadupp_white_BG.png" width = 80 height = 80 style="margin:10px 0px" align="right">
+	</div>
+</div>
+
+<br/>
+<div class = "form-group">
+	<form method = "POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<button class="btn btn-secondary">Register</button>
+</div>
+
+<br/><br/>
+
+{% endblock %}

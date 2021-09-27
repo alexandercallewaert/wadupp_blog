@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Comment on Blog Post{% endblock %}
+
+{% block content %}
+
+	<h1>Add Comment...</h1>
+	<br/>
+	<div class = "form-group">
+		<form method = "POST" action="{% url 'save_comment' %}">{% csrf_token %}
+			<div class="mb-3">
+				<input type="hidden" value="{{get_post.id}}" name="post_id">
+				<input type="hidden" value="{% if request.user.first_name or request.user.last_name %}{{request.user.first_name}} {{request.user.last_name}}{% else %}{{request.user.username}}{% endif %}" name="name">
+				<label class="form-label">User :</label>
+				<input class="form-control" type="text" value="{% if request.user.first_name or request.user.last_name %}{{request.user.first_name}} {{request.user.last_name}}{% else %}{{request.user.username}}{% endif %}" disabled>
+			  </div>
+
+			<div class="mb-3">
+
+				<label class="form-label">Your Comment :</label>
+				<textarea class="form-control" name="comment" rows="9"></textarea>
+			  </div>
+
+			<button class="btn btn-outline-primary">Add Comment</button><br/><br/>
+	</div>
+
+
+
+{% endblock %}

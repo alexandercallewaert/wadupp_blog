@@ -1,0 +1,1 @@
+Guide: #https://medium.com/@tsolakou.a/deploy-a-django-app-on-heroku-using-github-1a57a7ceb29

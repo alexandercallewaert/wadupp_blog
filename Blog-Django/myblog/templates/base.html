@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+
+<style>
+
+footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width:100%;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+}
+</style>
+
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+    <title>
+      {% block title %}
+          Alex Goes Abroad
+      {% endblock %}
+    </title>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'home' %}">Alexander Callewaert's Blog - 6 Months in South East Asia</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        
+
+
+        <!-- Category Menu Code -->
+        {% if cat_menu %}
+<!--        <li class="nav-item dropdown">-->
+<!--          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--            Countries-->
+<!--          </a>-->
+<!--          <div class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+
+
+<!--            {% for item in cat_menu %}-->
+<!--              <a class="dropdown-item" href="{% url 'category' item %}">{{ item }}</a>-->
+<!--            {% endfor %}-->
+
+<!--            -->
+<!--          </div>-->
+<!--        </li>-->
+        {% endif %}
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Countries
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="show_cats"></div>
+        </li>
+
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Bloggers
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown1" id="show_bloggers"></div>
+        </li>
+
+        {% if user.is_authenticated %}
+
+          {% if user.Allow_to_post %}
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_category' %}">Add Country</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'add_post' %}">Add Post</a>
+            </li>
+
+          {% endif %}
+
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+
+        {% endif %}
+
+
+
+        
+      </ul>
+
+<!-- dropdown menu on the right | everything related to profile + logout -->
+  {% if user.is_authenticated %}
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+
+        <li class="nav-item dropdown">
+
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ user.username }} | {{ user.first_name }} {{ user.last_name }}
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-left" aria-labelledby="navbarDropdown">
+
+              {% if user.profile.id %}
+                <li><a class="dropdown-item" href="{% url 'show_profile_page' user.profile.id %}">My Profile</a></li>
+
+                <li><a class="dropdown-item" href="{% url 'edit_profile_page' user.profile.id %}">Edit Profile Page</a></li>
+
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'create_profile_page' %}">Create Profile Page</a></li>
+
+              {% endif %}
+
+              <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Settings</a></li>
+
+              <li>
+                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+              </li>
+
+            </ul>
+        </li>
+
+      </ul>
+  {% endif %}
+      
+    </div>
+  </div>
+</nav>
+
+    <br/>
+    <div class = "container">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+
+
+<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  <script>
+        $.ajax({
+            url : '{% url 'get_country' %}',
+            type : 'POST',
+
+        })
+        .done(function(response){
+        console.log(response);
+        var prod = JSON.parse(response);
+        console.log(prod)
+        console.log('prod')
+
+        var len = prod.length;
+        console.log('len')
+        console.log(len)
+
+        let product_list = [];
+        search_result = ``
+
+        for(var i=0;i<len;i++){
+              var Category_Name = JSON.stringify(prod[i].fields.name);
+              var Category_Name2 = Category_Name.slice(0, -1)
+              var Category_Name3 = Category_Name2.slice(1);
+
+              var cat_pk = JSON.stringify(prod[i].pk);
+
+              search_result = search_result + `<a class="dropdown-item" href="/category/${cat_pk}">${Category_Name3}</a>`
+
+          }
+
+          console.log(search_result)
+          document.getElementById('show_cats').innerHTML = search_result;
+        })
+
+
+
+        $.ajax({
+            url : '{% url 'get_bloggers' %}',
+            type : 'POST',
+
+        })
+        .done(function(response){
+        console.log(response);
+        var prod = JSON.parse(response);
+        console.log(prod)
+        console.log('prod')
+
+        var len = prod.length;
+        console.log('len')
+        console.log(len)
+
+        let product_list = [];
+
+        search_result = ``
+
+
+        for(var i=0;i<len;i++){
+              var Category_Name = JSON.stringify(prod[i].fields.username);
+              var Category_Name2 = Category_Name.slice(0, -1)
+              var Category_Name3 = Category_Name2.slice(1);
+
+              var cat_pk = JSON.stringify(prod[i].pk);
+
+              search_result = search_result + `<a class="dropdown-item" href="/author_all_posts/${cat_pk}">${Category_Name3}</a>`
+          }
+
+          console.log(search_result)
+          document.getElementById('show_bloggers').innerHTML = search_result;
+        })
+  </script>
+
+  </body>
+
+  <br>
+  <br>
+  <br>
+  <br>
+
+
+
+<footer>
+  <div class="row">
+    <div class="col-md-4" align="center">made by Alexander Callewaert</div>
+    <div class="col-md-4" align="center"><img src="/media/images/profile/Wadupp_white_BG.png" width = 50 height = 50></div>
+    <div class="col-md-4" align="center">September 2021</div>
+  </div>
+</footer>
+
+</html>
